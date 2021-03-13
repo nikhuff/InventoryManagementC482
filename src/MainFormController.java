@@ -7,16 +7,8 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
-    public Label TheLabel;
-
+public class MainFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-
-    public void OnButtonAction(ActionEvent actionEvent) {
-        System.out.println("Button Clicked");
-        TheLabel.setText("You Clicked!");
     }
 }
