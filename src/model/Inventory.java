@@ -1,3 +1,5 @@
+package model;
+
 import javafx.collections.ObservableList;
 
 import java.util.regex.Matcher;

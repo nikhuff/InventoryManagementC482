@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="353.0" prefWidth="788.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainFormController">
+<AnchorPane prefHeight="353.0" prefWidth="788.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainFormController">
    <children>
       <Pane layoutX="14.0" layoutY="73.0" prefHeight="200.0" prefWidth="377.0">
          <children>
@@ -22,7 +22,7 @@
                   <TableColumn minWidth="9.0" prefWidth="121.0" text="Price/Cost Per Unit" />
               </columns>
             </TableView>
-            <Button layoutX="168.0" layoutY="174.0" mnemonicParsing="false" text="Add" />
+            <Button fx:id="addPartButton" layoutX="168.0" layoutY="174.0" mnemonicParsing="false" text="Add" />
             <Button layoutX="236.0" layoutY="174.0" mnemonicParsing="false" text="Modify" />
             <Button layoutX="312.0" layoutY="174.0" mnemonicParsing="false" text="Delete" />
          </children></Pane>
