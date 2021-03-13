@@ -13,14 +13,9 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <RadioButton layoutX="125.0" layoutY="35.0" mnemonicParsing="false" text="In-House">
+            <RadioButton fx:id="radioInHouse" layoutX="125.0" layoutY="35.0" mnemonicParsing="false" selected="true" text="In-House">
                <toggleGroup>
                   <ToggleGroup fx:id="PartType" />
-               </toggleGroup>
-            </RadioButton>
-            <RadioButton layoutX="245.0" layoutY="35.0" mnemonicParsing="false" text="Outsourced">
-               <toggleGroup>
-                  <ToggleGroup fx:id="PartType1" />
                </toggleGroup>
             </RadioButton>
             <Label layoutX="31.0" layoutY="87.0" text="ID" />
@@ -28,7 +23,7 @@
             <Label layoutX="31.0" layoutY="156.0" text="Inventory" />
             <Label layoutX="31.0" layoutY="191.0" text="Price/Cost" />
             <Label layoutX="31.0" layoutY="228.0" text="Max" />
-            <Label layoutX="31.0" layoutY="262.0" text="Machine ID" />
+            <Label fx:id="partTypeLabel" layoutX="31.0" layoutY="262.0" text="Machine ID" />
             <TextField editable="false" layoutX="125.0" layoutY="83.0" prefHeight="25.0" prefWidth="107.0" promptText="Auto Generated" />
             <TextField layoutX="125.0" layoutY="117.0" prefHeight="25.0" prefWidth="107.0" />
             <TextField layoutX="125.0" layoutY="152.0" prefHeight="25.0" prefWidth="107.0" />
@@ -39,6 +34,7 @@
             <TextField layoutX="286.0" layoutY="224.0" prefHeight="25.0" prefWidth="107.0" />
             <Button layoutX="302.0" layoutY="337.0" mnemonicParsing="false" text="Save" />
             <Button layoutX="367.0" layoutY="337.0" mnemonicParsing="false" onAction="#toMainForm" text="Cancel" />
+            <RadioButton fx:id="radioOutsourced" layoutX="224.0" layoutY="35.0" mnemonicParsing="false" text="Outsourced" toggleGroup="$PartType" />
          </children>
       </Pane>
    </children>
