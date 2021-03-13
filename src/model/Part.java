@@ -1,3 +1,5 @@
+package model;
+
 public abstract class Part {
 
     public int getId() { return id; }

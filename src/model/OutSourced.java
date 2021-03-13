@@ -1,3 +1,5 @@
+package model;
+
 public class OutSourced extends Part {
 
     private String companyName;
