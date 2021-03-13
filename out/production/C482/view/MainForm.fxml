@@ -22,8 +22,8 @@
                   <TableColumn minWidth="9.0" prefWidth="121.0" text="Price/Cost Per Unit" />
               </columns>
             </TableView>
-            <Button fx:id="addPartButton" layoutX="168.0" layoutY="174.0" mnemonicParsing="false" text="Add" />
-            <Button layoutX="236.0" layoutY="174.0" mnemonicParsing="false" text="Modify" />
+            <Button layoutX="168.0" layoutY="174.0" mnemonicParsing="false" onAction="#toAddPartForm" text="Add" />
+            <Button layoutX="236.0" layoutY="174.0" mnemonicParsing="false" onAction="#toModifyPartForm" text="Modify" />
             <Button layoutX="312.0" layoutY="174.0" mnemonicParsing="false" text="Delete" />
          </children></Pane>
       <Label layoutX="45.0" layoutY="34.0" text="Inventory Management System">
@@ -47,11 +47,11 @@
                   <TableColumn minWidth="9.0" prefWidth="121.0" text="Price/Cost Per Unit" />
                </columns>
             </TableView>
-            <Button layoutX="168.0" layoutY="174.0" mnemonicParsing="false" text="Add" />
-            <Button layoutX="236.0" layoutY="174.0" mnemonicParsing="false" text="Modify" />
+            <Button layoutX="168.0" layoutY="174.0" mnemonicParsing="false" onAction="#toAddProductForm" text="Add" />
+            <Button layoutX="236.0" layoutY="174.0" mnemonicParsing="false" onAction="#toModifyProductForm" text="Modify" />
             <Button layoutX="312.0" layoutY="174.0" mnemonicParsing="false" text="Delete" />
          </children>
       </Pane>
-      <Button layoutX="702.0" layoutY="307.0" mnemonicParsing="false" text="Exit" />
+      <Button layoutX="702.0" layoutY="307.0" mnemonicParsing="false" onAction="#exitApplication" text="Exit" />
    </children>
 </AnchorPane>
