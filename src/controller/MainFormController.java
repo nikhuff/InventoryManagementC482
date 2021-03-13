@@ -40,40 +40,29 @@ public class MainFormController implements Initializable {
     }
 
 
-    public void toAddPartForm(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPartForm.fxml"));
+    public void changeScene(ActionEvent actionEvent, String resourceName, String windowName, int height, int width) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource(resourceName));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 600, 480);
-        stage.setTitle("Add Part");
+        Scene scene = new Scene(root, height, width);
+        stage.setTitle(windowName);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void toAddPartForm(ActionEvent actionEvent) throws IOException {
+        changeScene(actionEvent, "/view/AddPartForm.fxml", "Add Part", 600, 400);
     }
 
     public void toModifyPartForm(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ModifyPartForm.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 600, 480);
-        stage.setTitle("Modify Part");
-        stage.setScene(scene);
-        stage.show();
+        changeScene(actionEvent, "/view/ModifyPartForm.fxml", "Modify Part", 600, 400);
     }
 
     public void toAddProductForm(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddProductForm.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 842, 612);
-        stage.setTitle("Add Product");
-        stage.setScene(scene);
-        stage.show();
+        changeScene(actionEvent, "/view/AddProductForm.fxml", "Add Product", 850, 600);
     }
 
     public void toModifyProductForm(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ModifyProductForm.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 842, 612);
-        stage.setTitle("Modify Product");
-        stage.setScene(scene);
-        stage.show();
+        changeScene(actionEvent, "/view/ModifyProductForm.fxml", "Modify Product", 850, 600);
     }
 
     public void exitApplication(ActionEvent actionEvent) throws IOException {
