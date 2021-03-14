@@ -1,16 +1,18 @@
 package model;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Inventory {
-    private static ObservableList<Part> allParts;
-    private static ObservableList<Product> allProducts;
+    private static ObservableList<Part> allParts = FXCollections.observableArrayList();
+    private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
-    public static void addPart(Part newPart) { allParts.add(newPart); }
-    public static void addProduct(Product newProduct) { allProducts.add(newProduct); }
+    public static void addPart(Part newPart) { allParts.addAll(newPart); }
+    public static void addProduct(Product newProduct) { allProducts.addAll(newProduct); }
 
     public static Part lookupPart(int partId) {
         for (Part currentPart : allParts) {
@@ -31,7 +33,7 @@ public class Inventory {
     }
 
     public static ObservableList<Part> lookupPart(String partName) {
-        ObservableList<Part> matches = null;
+        ObservableList<Part> matches = FXCollections.observableArrayList();
         Pattern pattern = Pattern.compile(partName, Pattern.CASE_INSENSITIVE);
         Matcher matcher = null;
         for (Part currentPart : allParts) {
@@ -44,7 +46,7 @@ public class Inventory {
     }
 
     public static ObservableList<Product> lookupProduct(String productName) {
-        ObservableList<Product> matches = null;
+        ObservableList<Product> matches = FXCollections.observableArrayList();
         Pattern pattern = Pattern.compile(productName, Pattern.CASE_INSENSITIVE);
         Matcher matcher = null;
         for (Product currentProduct : allProducts) {
