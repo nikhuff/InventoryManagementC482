@@ -8,10 +8,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Inventory;
 
@@ -23,7 +22,7 @@ public class MainFormController implements Initializable {
 
     public TableView partTable;
     public TableColumn partId;
-    public TableColumn partPartName;
+    public TableColumn partName;
     public TableColumn partInventory;
     public TableColumn partPrice;
 
@@ -33,15 +32,33 @@ public class MainFormController implements Initializable {
     public TableColumn productInventory;
     public TableColumn productPrice;
 
-    private Inventory inventory;
+    Inventory inventory;
+
+    public MainFormController(Inventory inv) {
+        this.inventory = inv;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        partTable.setItems(Inventory.getAllParts());
+        productTable.setItems(Inventory.getAllProducts());
+
+        partId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        partName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        partInventory.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        partPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        productId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        productName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        productInventory.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        productPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
-
     public void changeScene(ActionEvent actionEvent, String resourceName, String windowName, int height, int width) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(resourceName));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(resourceName));
+        controller.AddPartFormController controller = new controller.AddPartFormController(inventory);
+        loader.setController(controller);
+        Parent root = loader.load();
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, height, width);
         stage.setTitle(windowName);
@@ -50,6 +67,7 @@ public class MainFormController implements Initializable {
     }
 
     public void toAddPartForm(ActionEvent actionEvent) throws IOException {
+
         changeScene(actionEvent, "/view/AddPartForm.fxml", "Add Part", 600, 400);
     }
 
