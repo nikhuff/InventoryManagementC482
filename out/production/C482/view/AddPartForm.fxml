@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="570.0" prefWidth="513.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddPartFormController">
+<AnchorPane prefHeight="570.0" prefWidth="513.0"  xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane layoutX="34.0" layoutY="22.0" prefHeight="382.0" prefWidth="445.0">
          <children>
@@ -25,14 +25,14 @@
             <Label layoutX="31.0" layoutY="228.0" text="Max" />
             <Label fx:id="partTypeLabel" layoutX="31.0" layoutY="262.0" text="Machine ID" />
             <TextField editable="false" layoutX="125.0" layoutY="83.0" prefHeight="25.0" prefWidth="107.0" promptText="Auto Generated" />
-            <TextField layoutX="125.0" layoutY="117.0" prefHeight="25.0" prefWidth="107.0" />
-            <TextField layoutX="125.0" layoutY="152.0" prefHeight="25.0" prefWidth="107.0" />
-            <TextField layoutX="125.0" layoutY="187.0" prefHeight="25.0" prefWidth="107.0" />
-            <TextField layoutX="125.0" layoutY="224.0" prefHeight="25.0" prefWidth="107.0" />
-            <TextField layoutX="125.0" layoutY="258.0" prefHeight="25.0" prefWidth="107.0" />
+            <TextField fx:id="partName" layoutX="125.0" layoutY="117.0" prefHeight="25.0" prefWidth="107.0" />
+            <TextField fx:id="stock" layoutX="125.0" layoutY="152.0" prefHeight="25.0" prefWidth="107.0" />
+            <TextField fx:id="price" layoutX="125.0" layoutY="187.0" prefHeight="25.0" prefWidth="107.0" />
+            <TextField fx:id="max" layoutX="125.0" layoutY="224.0" prefHeight="25.0" prefWidth="107.0" />
+            <TextField fx:id="partInfo" layoutX="125.0" layoutY="258.0" prefHeight="25.0" prefWidth="107.0" />
             <Label layoutX="245.0" layoutY="228.0" text="Min" />
-            <TextField layoutX="286.0" layoutY="224.0" prefHeight="25.0" prefWidth="107.0" />
-            <Button layoutX="302.0" layoutY="337.0" mnemonicParsing="false" text="Save" />
+            <TextField fx:id="min" layoutX="286.0" layoutY="224.0" prefHeight="25.0" prefWidth="107.0" />
+            <Button layoutX="302.0" layoutY="337.0" mnemonicParsing="false" onAction="#addPart" text="Save" />
             <Button layoutX="367.0" layoutY="337.0" mnemonicParsing="false" onAction="#toMainForm" text="Cancel" />
             <RadioButton fx:id="radioOutsourced" layoutX="224.0" layoutY="35.0" mnemonicParsing="false" text="Outsourced" toggleGroup="$PartType" />
          </children>

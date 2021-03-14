@@ -38,7 +38,7 @@ public class AddPartFormController implements Initializable {
     private ToggleGroup PartType;
     @FXML
     private Label partTypeLabel;
-    private String partType;
+    private String partType = "inHouse";
     private int id = 1;
 
     public AddPartFormController(Inventory inv) {
@@ -62,10 +62,14 @@ public class AddPartFormController implements Initializable {
     }
 
     public void toMainForm(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MainForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
+        controller.MainFormController controller = new controller.MainFormController(inventory);
+        loader.setController(controller);
+        Parent root = loader.load();
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 800, 350);
         stage.setTitle("Inventory Management");
-        stage.setScene(new Scene(root, 788,353));
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -84,7 +88,6 @@ public class AddPartFormController implements Initializable {
             String companyName = partInfo.getText();
             inventory.addPart(new OutSourced(id, name, cost, inv, minimum, maximum, companyName));
         }
-        System.out.println("added item " + Inventory.getAllParts().get(0).getName());
         toMainForm(actionEvent);
     }
 }
