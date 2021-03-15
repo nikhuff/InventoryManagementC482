@@ -19,6 +19,7 @@ import model.Product;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -73,12 +74,32 @@ public class MainFormController implements Initializable {
     }
 
     public void changeScene(ActionEvent actionEvent, String windowName, int height, int width, FXMLLoader loader) throws IOException {
-        Parent root = loader.load();
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, height, width);
         stage.setTitle(windowName);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private boolean confirmDelete() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete");
+        alert.setHeaderText("Are you sure?");
+        alert.setContentText("Click ok to confirm");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void deletePart(ActionEvent actionEvent) {
@@ -87,7 +108,8 @@ public class MainFormController implements Initializable {
             errorMessage(1);
             return;
         }
-        inventory.deletePart(part);
+        if (confirmDelete())
+            inventory.deletePart(part);
     }
 
     public void deleteProduct(ActionEvent actionEvent) {
@@ -95,8 +117,12 @@ public class MainFormController implements Initializable {
         if (product == null) {
             errorMessage(1);
             return;
+        } else if (!product.getAllAssociatedParts().isEmpty()) {
+            errorMessage(3);
+            return;
         }
-        inventory.deleteProduct(product);
+        if (confirmDelete())
+            inventory.deleteProduct(product);
     }
 
     private void filterPart(String input) {
@@ -152,6 +178,9 @@ public class MainFormController implements Initializable {
         } else if (code == 2) {
             alert.setHeaderText("No Selection");
             alert.setContentText("Please select an item");
+        } else if (code == 3) {
+            alert.setHeaderText("Non-empty Product");
+            alert.setContentText("Unable to delete products with associated parts");
         }
         alert.showAndWait();
     }
@@ -160,7 +189,12 @@ public class MainFormController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddPartForm.fxml"));
         AddPartFormController controller = new AddPartFormController(inventory);
         loader.setController(controller);
-        changeScene(actionEvent, "Add Part", 600, 400, loader);
+        try {
+            changeScene(actionEvent, "Add Part", 600, 400, loader);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
     }
 
     public void toModifyPartForm(ActionEvent actionEvent) throws IOException {
@@ -173,14 +207,24 @@ public class MainFormController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPartForm.fxml"));
         ModifyPartFormController controller = new ModifyPartFormController(inventory, part, index);
         loader.setController(controller);
-        changeScene(actionEvent, "Modify Part", 600, 400, loader);
+        try {
+            changeScene(actionEvent, "Modify Part", 600, 400, loader);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
     }
 
     public void toAddProductForm(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddProductForm.fxml"));
         AddProductFormController controller = new AddProductFormController(inventory);
         loader.setController(controller);
-        changeScene(actionEvent, "Add Product", 850, 600, loader);
+        try {
+            changeScene(actionEvent, "Add Product", 850, 600, loader);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
     }
 
     public void toModifyProductForm(ActionEvent actionEvent) throws IOException {
@@ -193,10 +237,15 @@ public class MainFormController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyProductForm.fxml"));
         ModifyProductFormController controller = new ModifyProductFormController(inventory, product, index);
         loader.setController(controller);
-        changeScene(actionEvent, "Modify Product", 850, 600, loader);
+        try {
+            changeScene(actionEvent, "Modify Product", 850, 600, loader);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
     }
 
-    public void exitApplication(ActionEvent actionEvent) throws IOException {
+    public void exitApplication(ActionEvent actionEvent) {
         Platform.exit();
     }
 }

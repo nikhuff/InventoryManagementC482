@@ -93,16 +93,31 @@ public class ModifyPartFormController implements Initializable {
         } else if (code == 4) {
             alert.setHeaderText("Invalid Inventory Count");
             alert.setContentText("Inventory must be more than min and less than max");
+        } else if (code == 6) {
+            alert.setHeaderText("Wrong Input type");
+            alert.setContentText("Must be a valid price");
         }
         alert.showAndWait();
     }
 
     private boolean validateInteger(String name) {
+        try
+        {
+            Integer.parseInt(name);
+            return true;
+        } catch (NumberFormatException ex)
+        {
+            errorMessage(1);
+            return false;
+        }
+    }
+
+    private boolean validateDouble(String name) {
         if (!name.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d*\\.?\\d+|^\\d+\\.?\\d*$");
             Matcher matcher = pattern.matcher(name);
             if (!matcher.find()) {
-                errorMessage(1);
+                errorMessage(6);
                 return false;
             }
         }
@@ -149,7 +164,7 @@ public class ModifyPartFormController implements Initializable {
             errorMessage(3);
             return;
         }
-        if (!validateInteger(partCost.getText()) ||
+        if (!validateDouble(partCost.getText()) ||
                 !validateInteger(partInventory.getText()) ||
                 !validateInteger(partMin.getText()) ||
                 !validateInteger(partMax.getText())) {
@@ -171,35 +186,51 @@ public class ModifyPartFormController implements Initializable {
             return;
         }
 
+        boolean success = false;
+
         if (radioInHouse.isSelected()) {
-            updateInHouse(id, name, count, cost, max, min);
+            success = updateInHouse(id, name, count, cost, max, min);
         } else if (radioOutsourced.isSelected()) {
-            updateOutsourced(id, name, count, cost, max, min);
+            success = updateOutsourced(id, name, count, cost, max, min);
         }
-        toMainForm(actionEvent);
+        if(success)
+            toMainForm(actionEvent);
     }
 
-    private void updateInHouse(int id, String name, int count, double cost, int max, int min) {
-        int machineId = Integer.parseInt(partTypeId.getText().trim());
-        InHouse updated = new InHouse(id, name, cost, count, min, max, machineId);
-        inventory.updatePart(this.index, updated);
+    private boolean updateInHouse(int id, String name, int count, double cost, int max, int min) {
+        if (!validateInteger(partTypeId.getText())) {
+            return false;
+        }
+        int machineId = Integer.parseInt(partTypeId.getText());
+        inventory.addPart(new InHouse(id, name, cost, count, min, max, machineId));
+        return true;
     }
 
-    private void updateOutsourced(int id, String name, int count, double cost, int max, int min) {
+    private boolean updateOutsourced(int id, String name, int count, double cost, int max, int min) {
         String companyName = partTypeId.getText().trim();
+        if (companyName.isEmpty()) {
+            errorMessage(3);
+            return false;
+        }
         OutSourced updated = new OutSourced(id, name, cost, count, min, max, companyName);
         inventory.updatePart(this.index, updated);
+        return true;
     }
 
     public void toMainForm(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
         controller.MainFormController controller = new controller.MainFormController(inventory);
         loader.setController(controller);
-        Parent root = loader.load();
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 800, 350);
-        stage.setTitle("Inventory Management");
-        stage.setScene(scene);
-        stage.show();
+        try {
+            Parent root = loader.load();
+            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 800, 350);
+            stage.setTitle("Inventory Management");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
     }
 }

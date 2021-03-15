@@ -63,11 +63,21 @@ public class AddPartFormController implements Initializable {
     }
 
     private boolean validateInteger(String name) {
+        try {
+            Integer.parseInt(name);
+            return true;
+        } catch (NumberFormatException ex) {
+            errorMessage(1);
+            return false;
+        }
+    }
+
+    private boolean validateDouble(String name) {
         if (!name.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d*\\.?\\d+|^\\d+\\.?\\d*$");
             Matcher matcher = pattern.matcher(name);
             if (!matcher.find()) {
-                errorMessage(1);
+                errorMessage(6);
                 return false;
             }
         }
@@ -104,17 +114,7 @@ public class AddPartFormController implements Initializable {
         return false;
     }
 
-    public void toMainForm(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
-        controller.MainFormController controller = new controller.MainFormController(inventory);
-        loader.setController(controller);
-        Parent root = loader.load();
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 800, 350);
-        stage.setTitle("Inventory Management");
-        stage.setScene(scene);
-        stage.show();
-    }
+
 
     private void errorMessage(int code) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -131,6 +131,9 @@ public class AddPartFormController implements Initializable {
         } else if (code == 4) {
             alert.setHeaderText("Invalid Inventory Count");
             alert.setContentText("Inventory must be more than min and less than max");
+        } else if (code == 6) {
+            alert.setHeaderText("Wrong Input type");
+            alert.setContentText("Must be a valid price");
         }
         alert.showAndWait();
     }
@@ -144,7 +147,7 @@ public class AddPartFormController implements Initializable {
             errorMessage(3);
             return;
         }
-        if (!validateInteger(price.getText()) ||
+        if (!validateDouble(price.getText()) ||
                 !validateInteger(stock.getText()) ||
                 !validateInteger(min.getText()) ||
                 !validateInteger(max.getText())) {
@@ -166,14 +169,36 @@ public class AddPartFormController implements Initializable {
         }
 
         if (partType == "inHouse") {
-            int machineId = Integer.parseInt(partInfo.getText());
-            if (!validateInteger(partInfo.getText()))
+            if (!validateInteger(partInfo.getText())) {
                 return;
+            }
+            int machineId = Integer.parseInt(partInfo.getText());
             inventory.addPart(new InHouse(id, name, cost, inv, minimum, maximum, machineId));
         } else if (partType == "outsourced") {
             String companyName = partInfo.getText();
+            if (companyName.isEmpty()) {
+                errorMessage(3);
+                return;
+            }
             inventory.addPart(new OutSourced(id, name, cost, inv, minimum, maximum, companyName));
         }
         toMainForm(actionEvent);
+    }
+
+    public void toMainForm(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
+        controller.MainFormController controller = new controller.MainFormController(inventory);
+        loader.setController(controller);
+        try {
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 800, 350);
+            stage.setTitle("Inventory Management");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
     }
 }

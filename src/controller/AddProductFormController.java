@@ -9,10 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Inventory;
@@ -22,6 +19,7 @@ import model.Product;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -79,17 +77,37 @@ public class AddProductFormController implements Initializable {
 
     public void addAssociatedPart(ActionEvent actionEvent) {
         Part part = (Part)partTable.getSelectionModel().getSelectedItem();
-        if (part == null)
+        if (part == null) {
+            errorMessage(5);
             return;
+        }
         if (!associatedParts.contains(part))
             this.associatedParts.add(part);
     }
 
+    private boolean confirmDelete() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Remove");
+        alert.setHeaderText("Are you sure?");
+        alert.setContentText("Click ok to confirm");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void removeAssociatedPart(ActionEvent actionEvent) {
         Part part = (Part)associatedPartTable.getSelectionModel().getSelectedItem();
-        if (part == null)
+        if (part == null) {
+            errorMessage(5);
             return;
-        this.associatedParts.remove(part);
+        }
+        if (confirmDelete()) {
+            this.associatedParts.remove(part);
+        }
     }
 
     private void filterPart(String input) {
@@ -126,16 +144,34 @@ public class AddProductFormController implements Initializable {
         } else if (code == 4) {
             alert.setHeaderText("Invalid Inventory Count");
             alert.setContentText("Inventory must be more than min and less than max");
+        } else if (code == 5) {
+            alert.setHeaderText("Nothing Selected");
+            alert.setContentText("Must select item to continue");
+        } else if (code == 6) {
+            alert.setHeaderText("Wrong Input type");
+            alert.setContentText("Must be a valid price");
         }
         alert.showAndWait();
     }
 
     private boolean validateInteger(String name) {
+        try
+        {
+            Integer.parseInt(name);
+            return true;
+        } catch (NumberFormatException ex)
+        {
+            errorMessage(1);
+            return false;
+        }
+    }
+
+    private boolean validateDouble(String name) {
         if (!name.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d*\\.?\\d+|^\\d+\\.?\\d*$");
             Matcher matcher = pattern.matcher(name);
             if (!matcher.find()) {
-                errorMessage(1);
+                errorMessage(6);
                 return false;
             }
         }
@@ -182,7 +218,7 @@ public class AddProductFormController implements Initializable {
             errorMessage(3);
             return;
         }
-        if (!validateInteger(productPrice.getText()) ||
+        if (!validateDouble(productPrice.getText()) ||
                 !validateInteger(productCount.getText()) ||
                 !validateInteger(productMin.getText()) ||
                 !validateInteger(productMax.getText())) {
@@ -215,11 +251,16 @@ public class AddProductFormController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
         controller.MainFormController controller = new controller.MainFormController(inventory);
         loader.setController(controller);
-        Parent root = loader.load();
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 800, 350);
-        stage.setTitle("Inventory Management");
-        stage.setScene(scene);
-        stage.show();
+        try {
+            Parent root = loader.load();
+            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 800, 350);
+            stage.setTitle("Inventory Management");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
     }
 }
