@@ -10,9 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Inventory;
@@ -85,15 +83,19 @@ public class MainFormController implements Initializable {
 
     public void deletePart(ActionEvent actionEvent) {
         Part part = (Part)partTable.getSelectionModel().getSelectedItem();
-        if (part == null)
+        if (part == null) {
+            errorMessage(1);
             return;
+        }
         inventory.deletePart(part);
     }
 
     public void deleteProduct(ActionEvent actionEvent) {
         Product product = (Product)productTable.getSelectionModel().getSelectedItem();
-        if (product == null)
+        if (product == null) {
+            errorMessage(1);
             return;
+        }
         inventory.deleteProduct(product);
     }
 
@@ -108,9 +110,12 @@ public class MainFormController implements Initializable {
             } else {
                 matches.addAll(inventory.lookupPart(input));
             }
-
+            if (matches.isEmpty()) {
+                partTable.setPlaceholder(new Label("No items match your search."));
+            } else {
+                partTable.setPlaceholder(new Label("No Content in Table"));
+            }
             partTable.setItems(matches);
-
         } else {
             partTable.setItems(inventory.getAllParts());
         }
@@ -127,16 +132,28 @@ public class MainFormController implements Initializable {
             } else {
                 matches.addAll(inventory.lookupProduct(input));
             }
-
             if (matches.isEmpty()) {
-                productTable.setItems(Inventory.getAllProducts());
+                productTable.setPlaceholder(new Label("No items match your search."));
             } else {
-                productTable.setItems(matches);
+                productTable.setPlaceholder(new Label("No Content in Table"));
             }
             productTable.setItems(matches);
         } else {
             productTable.setItems(inventory.getAllProducts());
         }
+    }
+
+    private void errorMessage(int code) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        if (code == 1) {
+            alert.setHeaderText("Delete Failed");
+            alert.setContentText("No option selected");
+        } else if (code == 2) {
+            alert.setHeaderText("No Selection");
+            alert.setContentText("Please select an item");
+        }
+        alert.showAndWait();
     }
 
     public void toAddPartForm(ActionEvent actionEvent) throws IOException {
@@ -148,8 +165,10 @@ public class MainFormController implements Initializable {
 
     public void toModifyPartForm(ActionEvent actionEvent) throws IOException {
         Part part = (Part)partTable.getSelectionModel().getSelectedItem();
-        if (part == null)
+        if (part == null) {
+            errorMessage(2);
             return;
+        }
         int index = partTable.getSelectionModel().getFocusedIndex();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPartForm.fxml"));
         ModifyPartFormController controller = new ModifyPartFormController(inventory, part, index);
@@ -166,8 +185,10 @@ public class MainFormController implements Initializable {
 
     public void toModifyProductForm(ActionEvent actionEvent) throws IOException {
         Product product = (Product)productTable.getSelectionModel().getSelectedItem();
-        if (product == null)
+        if (product == null) {
+            errorMessage(2);
             return;
+        }
         int index = productTable.getSelectionModel().getSelectedIndex();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyProductForm.fxml"));
         ModifyProductFormController controller = new ModifyProductFormController(inventory, product, index);
