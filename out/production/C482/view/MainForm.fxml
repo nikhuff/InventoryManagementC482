@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="353.0" prefWidth="788.0" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="353.0" prefWidth="788.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane layoutX="14.0" layoutY="73.0" prefHeight="200.0" prefWidth="377.0">
          <children>
@@ -13,7 +13,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <TextField layoutX="216.0" layoutY="2.0" promptText="Search by Part ID or Number" />
+            <TextField fx:id="partSearchBar" layoutX="216.0" layoutY="2.0" promptText="Search by Part ID or Number" />
             <TableView fx:id="partTable" layoutX="12.0" layoutY="30.0" prefHeight="141.0" prefWidth="357.0">
               <columns>
                 <TableColumn fx:id="partId" prefWidth="53.0" text="Part ID" />
@@ -24,7 +24,7 @@
             </TableView>
             <Button layoutX="168.0" layoutY="174.0" mnemonicParsing="false" onAction="#toAddPartForm" text="Add" />
             <Button layoutX="236.0" layoutY="174.0" mnemonicParsing="false" onAction="#toModifyPartForm" text="Modify" />
-            <Button layoutX="312.0" layoutY="174.0" mnemonicParsing="false" text="Delete" />
+            <Button layoutX="312.0" layoutY="174.0" mnemonicParsing="false" onAction="#deletePart" text="Delete" />
          </children></Pane>
       <Label layoutX="45.0" layoutY="34.0" text="Inventory Management System">
          <font>
@@ -38,7 +38,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <TextField layoutX="216.0" layoutY="2.0" promptText="Search by Part ID or Number" />
+            <TextField fx:id="productSearchBar" layoutX="216.0" layoutY="2.0" promptText="Search by Part ID or Number" />
             <TableView fx:id="productTable" layoutX="12.0" layoutY="30.0" prefHeight="141.0" prefWidth="357.0">
                <columns>
                   <TableColumn fx:id="productId" prefWidth="66.0" text="Product ID" />
@@ -49,7 +49,7 @@
             </TableView>
             <Button layoutX="168.0" layoutY="174.0" mnemonicParsing="false" onAction="#toAddProductForm" text="Add" />
             <Button layoutX="236.0" layoutY="174.0" mnemonicParsing="false" onAction="#toModifyProductForm" text="Modify" />
-            <Button layoutX="312.0" layoutY="174.0" mnemonicParsing="false" text="Delete" />
+            <Button layoutX="312.0" layoutY="174.0" mnemonicParsing="false" onAction="#deleteProduct" text="Delete" />
          </children>
       </Pane>
       <Button layoutX="702.0" layoutY="307.0" mnemonicParsing="false" onAction="#exitApplication" text="Exit" />

@@ -7,12 +7,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Inventory inventory = new Inventory();
         addData(inventory);
+        String test = "";
+
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
         controller.MainFormController controller = new controller.MainFormController(inventory);

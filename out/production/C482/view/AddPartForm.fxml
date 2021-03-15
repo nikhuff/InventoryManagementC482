@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="570.0" prefWidth="513.0"  xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="570.0" prefWidth="513.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
    <children>
       <Pane layoutX="34.0" layoutY="22.0" prefHeight="382.0" prefWidth="445.0">
          <children>
@@ -24,7 +24,7 @@
             <Label layoutX="31.0" layoutY="191.0" text="Price/Cost" />
             <Label layoutX="31.0" layoutY="228.0" text="Max" />
             <Label fx:id="partTypeLabel" layoutX="31.0" layoutY="262.0" text="Machine ID" />
-            <TextField editable="false" layoutX="125.0" layoutY="83.0" prefHeight="25.0" prefWidth="107.0" promptText="Auto Generated" />
+            <TextField disable="true" editable="false" layoutX="125.0" layoutY="83.0" prefHeight="25.0" prefWidth="107.0" promptText="Auto Generated" />
             <TextField fx:id="partName" layoutX="125.0" layoutY="117.0" prefHeight="25.0" prefWidth="107.0" />
             <TextField fx:id="stock" layoutX="125.0" layoutY="152.0" prefHeight="25.0" prefWidth="107.0" />
             <TextField fx:id="price" layoutX="125.0" layoutY="187.0" prefHeight="25.0" prefWidth="107.0" />

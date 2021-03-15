@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="612.0" prefWidth="842.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddProductFormController">
+<AnchorPane prefHeight="612.0" prefWidth="842.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane layoutX="28.0" layoutY="28.0" prefHeight="324.0" prefWidth="324.0">
          <children>
@@ -19,40 +19,40 @@
             <Label layoutX="16.0" layoutY="162.0" text="Price" />
             <Label layoutX="16.0" layoutY="195.0" text="Max" />
             <Label layoutX="162.0" layoutY="195.0" text="Min" />
-            <TextField layoutX="66.0" layoutY="63.0" />
-            <TextField layoutX="66.0" layoutY="93.0" />
-            <TextField layoutX="66.0" layoutY="123.0" prefHeight="25.0" prefWidth="79.0" />
-            <TextField layoutX="66.0" layoutY="158.0" prefHeight="25.0" prefWidth="79.0" />
-            <TextField layoutX="66.0" layoutY="191.0" prefHeight="25.0" prefWidth="79.0" />
-            <TextField layoutX="206.0" layoutY="191.0" prefHeight="25.0" prefWidth="79.0" />
+            <TextField disable="true" editable="false" layoutX="66.0" layoutY="63.0" promptText="Auto Generated" />
+            <TextField fx:id="productName" layoutX="66.0" layoutY="93.0" />
+            <TextField fx:id="productCount" layoutX="66.0" layoutY="123.0" prefHeight="25.0" prefWidth="79.0" />
+            <TextField fx:id="productPrice" layoutX="66.0" layoutY="158.0" prefHeight="25.0" prefWidth="79.0" />
+            <TextField fx:id="productMax" layoutX="66.0" layoutY="191.0" prefHeight="25.0" prefWidth="79.0" />
+            <TextField fx:id="productMin" layoutX="206.0" layoutY="191.0" prefHeight="25.0" prefWidth="79.0" />
          </children>
       </Pane>
       <Pane layoutX="421.0" layoutY="28.0" prefHeight="285.0" prefWidth="403.0">
          <children>
-            <TextField layoutX="248.0" layoutY="2.0" prefHeight="25.0" prefWidth="155.0" promptText="Search by Part ID or Name" />
-            <TableView layoutY="33.0" prefHeight="199.0" prefWidth="403.0">
+            <TextField fx:id="partSearchBar" layoutX="248.0" layoutY="2.0" prefHeight="25.0" prefWidth="155.0" promptText="Search by Part ID or Name" />
+            <TableView fx:id="partTable" layoutY="33.0" prefHeight="199.0" prefWidth="403.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Part ID" />
-                <TableColumn prefWidth="75.0" text="Part Name" />
-                  <TableColumn prefWidth="113.0" text="Inventory Level" />
-                  <TableColumn prefWidth="139.0" text="Price/Cost per Unit" />
+                <TableColumn fx:id="partId" prefWidth="75.0" text="Part ID" />
+                <TableColumn fx:id="partName" prefWidth="75.0" text="Part Name" />
+                  <TableColumn fx:id="partInventory" prefWidth="113.0" text="Inventory Level" />
+                  <TableColumn fx:id="partPrice" prefWidth="139.0" text="Price/Cost per Unit" />
               </columns>
             </TableView>
-            <Button layoutX="300.0" layoutY="246.0" mnemonicParsing="false" text="Add" />
+            <Button layoutX="300.0" layoutY="246.0" mnemonicParsing="false" onAction="#addAssociatedPart" text="Add" />
          </children>
       </Pane>
       <Pane layoutX="421.0" layoutY="310.0" prefHeight="285.0" prefWidth="403.0">
          <children>
-            <TableView layoutY="14.0" prefHeight="199.0" prefWidth="403.0">
+            <TableView fx:id="associatedPartTable" layoutY="14.0" prefHeight="199.0" prefWidth="403.0">
                <columns>
-                  <TableColumn prefWidth="75.0" text="Part ID" />
-                  <TableColumn prefWidth="75.0" text="Part Name" />
-                  <TableColumn prefWidth="113.0" text="Inventory Level" />
-                  <TableColumn prefWidth="139.0" text="Price/Cost per Unit" />
+                  <TableColumn fx:id="assPartId" prefWidth="75.0" text="Part ID" />
+                  <TableColumn fx:id="assPartName" prefWidth="75.0" text="Part Name" />
+                  <TableColumn fx:id="assPartInventory" prefWidth="113.0" text="Inventory Level" />
+                  <TableColumn fx:id="assPartPrice" prefWidth="139.0" text="Price/Cost per Unit" />
                </columns>
             </TableView>
-            <Button layoutX="245.0" layoutY="219.0" mnemonicParsing="false" text="Remove Associated Part" />
-            <Button layoutX="245.0" layoutY="252.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="57.0" text="Save" />
+            <Button layoutX="245.0" layoutY="219.0" mnemonicParsing="false" onAction="#removeAssociatedPart" text="Remove Associated Part" />
+            <Button layoutX="245.0" layoutY="252.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="25.0" prefWidth="57.0" text="Save" />
             <Button layoutX="331.0" layoutY="252.0" mnemonicParsing="false" onAction="#toMainForm" prefHeight="25.0" prefWidth="57.0" text="Cancel" />
          </children>
       </Pane>

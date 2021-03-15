@@ -34,7 +34,7 @@ public class Inventory {
 
     public static ObservableList<Part> lookupPart(String partName) {
         ObservableList<Part> matches = FXCollections.observableArrayList();
-        Pattern pattern = Pattern.compile(partName, Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^" + partName + "|" + partName + "$|\\s" + partName, Pattern.CASE_INSENSITIVE);
         Matcher matcher = null;
         for (Part currentPart : allParts) {
             matcher = pattern.matcher(currentPart.getName());
