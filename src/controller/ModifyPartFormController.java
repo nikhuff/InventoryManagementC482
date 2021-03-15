@@ -41,12 +41,21 @@ public class ModifyPartFormController implements Initializable {
     public TextField partMin;
     public TextField partTypeId;
 
+    /**
+     *
+     * @param inv inventory singleton
+     * @param part part to be modified
+     * @param index index of part being modified
+     */
     public ModifyPartFormController(Inventory inv, Part part, int index) {
         this.inventory = inv;
         this.index = index;
         this.part = part;
     }
 
+    /**
+     * changes label
+     */
     private void updateRadio() {
         if (radioInHouse.isSelected()) {
             partTypeLabel.setText("Machine ID");
@@ -55,6 +64,12 @@ public class ModifyPartFormController implements Initializable {
         }
     }
 
+    /**
+     * fill in text fields with part values
+     * set up radio listener
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.partId.setText(String.valueOf(part.getId()));
@@ -78,6 +93,11 @@ public class ModifyPartFormController implements Initializable {
         });
     }
 
+    /**
+     * error handler
+     * should be own class
+     * @param code
+     */
     private void errorMessage(int code) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -100,18 +120,26 @@ public class ModifyPartFormController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * is this a valid integer
+     * @param name string to test
+     * @return isvalid
+     */
     private boolean validateInteger(String name) {
-        try
-        {
+        try {
             Integer.parseInt(name);
             return true;
-        } catch (NumberFormatException ex)
-        {
+        } catch (NumberFormatException ex) {
             errorMessage(1);
             return false;
         }
     }
 
+    /**
+     * is this a valid double
+     * @param name string to test
+     * @return yes or no
+     */
     private boolean validateDouble(String name) {
         if (!name.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d*\\.?\\d+|^\\d+\\.?\\d*$");
@@ -124,6 +152,11 @@ public class ModifyPartFormController implements Initializable {
         return true;
     }
 
+    /**
+     * min less than max
+     * @param min min to test
+     * @return is it less
+     */
     private boolean validateMin(int min) {
         if (!partMax.getText().isEmpty()) {
             if (min > Integer.parseInt(this.partMax.getText())) {
@@ -134,6 +167,11 @@ public class ModifyPartFormController implements Initializable {
         return true;
     }
 
+    /**
+     * max greater than min
+     * @param max max to test
+     * @return is it more
+     */
     private boolean validateMax(int max) {
         if (!partMin.getText().isEmpty()) {
             if (max < Integer.parseInt(this.partMin.getText())) {
@@ -144,6 +182,11 @@ public class ModifyPartFormController implements Initializable {
         return true;
     }
 
+    /**
+     * is inventory between min and max
+     * @param inv inv count
+     * @return is it between
+     */
     private boolean validateInventory(int inv) {
         if (!partMax.getText().isEmpty() && !partMin.getText().isEmpty()) {
             if (inv >= Integer.parseInt(partMin.getText()) && inv <= Integer.parseInt(partMax.getText())) {
@@ -155,6 +198,11 @@ public class ModifyPartFormController implements Initializable {
         return false;
     }
 
+    /**
+     * check bounds and save to inventory
+     * @param actionEvent
+     * @throws IOException
+     */
     public void save(ActionEvent actionEvent) throws IOException {
         if (partName.getText().isEmpty() ||
                 partCost.getText().isEmpty() ||
@@ -197,6 +245,16 @@ public class ModifyPartFormController implements Initializable {
             toMainForm(actionEvent);
     }
 
+    /**
+     * update inventory if it's an inhouse part
+     * @param id part id
+     * @param name part name
+     * @param count inv count
+     * @param cost part cost
+     * @param max inv max
+     * @param min inv min
+     * @return if successful
+     */
     private boolean updateInHouse(int id, String name, int count, double cost, int max, int min) {
         if (!validateInteger(partTypeId.getText())) {
             return false;
@@ -206,6 +264,16 @@ public class ModifyPartFormController implements Initializable {
         return true;
     }
 
+    /**
+     * updated inventory if Outsourced
+     * @param id part id
+     * @param name part name
+     * @param count part count
+     * @param cost part cost
+     * @param max inv max
+     * @param min inv min
+     * @return was successful
+     */
     private boolean updateOutsourced(int id, String name, int count, double cost, int max, int min) {
         String companyName = partTypeId.getText().trim();
         if (companyName.isEmpty()) {
@@ -217,6 +285,11 @@ public class ModifyPartFormController implements Initializable {
         return true;
     }
 
+    /**
+     * return to main window
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toMainForm(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
         controller.MainFormController controller = new controller.MainFormController(inventory);

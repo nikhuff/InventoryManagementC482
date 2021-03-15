@@ -45,10 +45,19 @@ public class MainFormController implements Initializable {
 
     Inventory inventory;
 
+    /**
+     * initiate simpleton
+     * @param inv global
+     */
     public MainFormController(Inventory inv) {
         this.inventory = inv;
     }
 
+    /**
+     * initialize tables and search bar listeners
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partTable.setItems(Inventory.getAllParts());
@@ -73,6 +82,15 @@ public class MainFormController implements Initializable {
         });
     }
 
+    /**
+     * go to a new window
+     * @param actionEvent event
+     * @param windowName window name
+     * @param height window height
+     * @param width window width
+     * @param loader use the loader attached to our custom controller
+     * @throws IOException
+     */
     public void changeScene(ActionEvent actionEvent, String windowName, int height, int width, FXMLLoader loader) throws IOException {
         Parent root = null;
         try {
@@ -88,6 +106,10 @@ public class MainFormController implements Initializable {
         stage.show();
     }
 
+    /**
+     * are you sure?
+     * @return yes or no
+     */
     private boolean confirmDelete() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete");
@@ -102,6 +124,10 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * remove part from inventory
+     * @param actionEvent button press
+     */
     public void deletePart(ActionEvent actionEvent) {
         Part part = (Part)partTable.getSelectionModel().getSelectedItem();
         if (part == null) {
@@ -112,6 +138,10 @@ public class MainFormController implements Initializable {
             inventory.deletePart(part);
     }
 
+    /**
+     * remove product from inventory
+     * @param actionEvent buttong press
+     */
     public void deleteProduct(ActionEvent actionEvent) {
         Product product = (Product)productTable.getSelectionModel().getSelectedItem();
         if (product == null) {
@@ -125,6 +155,10 @@ public class MainFormController implements Initializable {
             inventory.deleteProduct(product);
     }
 
+    /**
+     * filters part list
+     * @param input string to filter by
+     */
     private void filterPart(String input) {
         if (!input.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d+$");
@@ -147,6 +181,10 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * filters product list
+     * @param input string to filter by
+     */
     private void filterProduct(String input) {
         if (!input.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d+$");
@@ -169,6 +207,11 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * error message handler
+     * should be another class
+     * @param code error code
+     */
     private void errorMessage(int code) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -185,6 +228,12 @@ public class MainFormController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * go to add part window
+     * instantiated controller and passed inventory
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toAddPartForm(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddPartForm.fxml"));
         AddPartFormController controller = new AddPartFormController(inventory);
@@ -197,6 +246,11 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * go to modify part window pass inventory
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toModifyPartForm(ActionEvent actionEvent) throws IOException {
         Part part = (Part)partTable.getSelectionModel().getSelectedItem();
         if (part == null) {
@@ -215,6 +269,11 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * go to add product pass inventory
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toAddProductForm(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddProductForm.fxml"));
         AddProductFormController controller = new AddProductFormController(inventory);
@@ -227,6 +286,11 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * go to modify product pass inventory
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toModifyProductForm(ActionEvent actionEvent) throws IOException {
         Product product = (Product)productTable.getSelectionModel().getSelectedItem();
         if (product == null) {
@@ -245,6 +309,10 @@ public class MainFormController implements Initializable {
         }
     }
 
+    /**
+     * exit
+     * @param actionEvent
+     */
     public void exitApplication(ActionEvent actionEvent) {
         Platform.exit();
     }

@@ -51,12 +51,23 @@ public class ModifyProductFormController implements Initializable {
     @FXML
     private TextField partSearchBar;
 
+    /**
+     *
+     * @param inv singleton inventory
+     * @param product product to modify
+     * @param index index of product
+     */
     public ModifyProductFormController(Inventory inv, Product product, int index) {
         this.inventory = inv;
         this.index = index;
         this.product = product;
     }
 
+    /**
+     * initialize text fields, tables, and search bar listener
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.productId.setText(String.valueOf(this.product.getId()));
@@ -86,6 +97,10 @@ public class ModifyProductFormController implements Initializable {
         });
     }
 
+    /**
+     * add part to association list
+     * @param actionEvent
+     */
     public void addAssociatedPart(ActionEvent actionEvent) {
         Part part = (Part)partTable.getSelectionModel().getSelectedItem();
         if (part == null) {
@@ -96,6 +111,10 @@ public class ModifyProductFormController implements Initializable {
             this.associatedParts.add(part);
     }
 
+    /**
+     * remove part from association list
+     * @param actionEvent
+     */
     public void removeAssociatedPart(ActionEvent actionEvent) {
         Part part = (Part)associatedPartTable.getSelectionModel().getSelectedItem();
         if (part == null) {
@@ -107,6 +126,10 @@ public class ModifyProductFormController implements Initializable {
         }
     }
 
+    /**
+     * do you want to delete
+     * @return yes or no
+     */
     private boolean confirmDelete() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Remove");
@@ -121,6 +144,10 @@ public class ModifyProductFormController implements Initializable {
         }
     }
 
+    /**
+     * error handler
+     * @param code error code
+     */
     private void errorMessage(int code) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -146,6 +173,11 @@ public class ModifyProductFormController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * is this a valid integer
+     * @param name integer to test
+     * @return is valid
+     */
     private boolean validateInteger(String name) {
         try {
             Integer.parseInt(name);
@@ -156,6 +188,11 @@ public class ModifyProductFormController implements Initializable {
         }
     }
 
+    /**
+     * is this a valid double
+     * @param name double to test
+     * @return is valid
+     */
     private boolean validateDouble(String name) {
         if (!name.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d*\\.?\\d+|^\\d+\\.?\\d*$");
@@ -168,6 +205,11 @@ public class ModifyProductFormController implements Initializable {
         return true;
     }
 
+    /**
+     * min less than max
+     * @param min min to test
+     * @return is less than
+     */
     private boolean validateMin(int min) {
         if (!productMax.getText().isEmpty()) {
             if (min > Integer.parseInt(this.productMax.getText())) {
@@ -178,6 +220,11 @@ public class ModifyProductFormController implements Initializable {
         return true;
     }
 
+    /**
+     * max more than min
+     * @param max max to test
+     * @return is more than
+     */
     private boolean validateMax(int max) {
         if (!productMin.getText().isEmpty()) {
             if (max < Integer.parseInt(this.productMin.getText())) {
@@ -188,6 +235,11 @@ public class ModifyProductFormController implements Initializable {
         return true;
     }
 
+    /**
+     * inv between min and max
+     * @param inv inv count
+     * @return yes or no
+     */
     private boolean validateInventory(int inv) {
         if (!productMax.getText().isEmpty() && !productMin.getText().isEmpty()) {
             if (inv >= Integer.parseInt(productMin.getText()) && inv <= Integer.parseInt(productMax.getText())) {
@@ -199,6 +251,11 @@ public class ModifyProductFormController implements Initializable {
         return false;
     }
 
+    /**
+     * check user input and update product
+     * @param actionEvent
+     * @throws IOException
+     */
     public void updateProduct(ActionEvent actionEvent) throws IOException {
         if (productName.getText().isEmpty() ||
                 productCost.getText().isEmpty() ||
@@ -237,6 +294,10 @@ public class ModifyProductFormController implements Initializable {
         toMainForm(actionEvent);
     }
 
+    /**
+     * filter list by input
+     * @param input input to filter by
+     */
     private void filterPart(String input) {
         if (!input.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d+$");
@@ -256,6 +317,11 @@ public class ModifyProductFormController implements Initializable {
         }
     }
 
+    /**
+     * return to main view
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toMainForm(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
         controller.MainFormController controller = new controller.MainFormController(inventory);

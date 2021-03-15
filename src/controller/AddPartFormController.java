@@ -41,11 +41,20 @@ public class AddPartFormController implements Initializable {
     private String partType = "inHouse";
     private int id;
 
+    /**
+     * generates random id and initializes inv
+     * @param inv singleton inventory
+     */
     public AddPartFormController(Inventory inv) {
         this.inventory = inv;
         id = ThreadLocalRandom.current().nextInt(1000,2000);
     }
 
+    /**
+     * set up listener for label change
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         PartType.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
@@ -62,6 +71,11 @@ public class AddPartFormController implements Initializable {
         });
     }
 
+    /**
+     * check to see if string is an integer
+     * @param name string to be checked
+     * @return is valid
+     */
     private boolean validateInteger(String name) {
         try {
             Integer.parseInt(name);
@@ -72,6 +86,11 @@ public class AddPartFormController implements Initializable {
         }
     }
 
+    /**
+     * is this string a double
+     * @param name string to be check
+     * @return is valid
+     */
     private boolean validateDouble(String name) {
         if (!name.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d*\\.?\\d+|^\\d+\\.?\\d*$");
@@ -84,6 +103,11 @@ public class AddPartFormController implements Initializable {
         return true;
     }
 
+    /**
+     * is min less than max
+     * @param min min
+     * @return is less
+     */
     private boolean validateMin(int min) {
         if (!max.getText().isEmpty()) {
             if (min > Integer.parseInt(this.max.getText())) {
@@ -94,6 +118,11 @@ public class AddPartFormController implements Initializable {
         return true;
     }
 
+    /**
+     * is max more than min
+     * @param max max
+     * @return is greater
+     */
     private boolean validateMax(int max) {
         if (!min.getText().isEmpty()) {
             if (max < Integer.parseInt(this.min.getText())) {
@@ -103,6 +132,12 @@ public class AddPartFormController implements Initializable {
         }
         return true;
     }
+
+    /**
+     * is inventory between min and max
+     * @param inv inv count
+     * @return is between
+     */
     private boolean validateInventory(int inv) {
         if (!max.getText().isEmpty() && !min.getText().isEmpty()) {
             if (inv >= Integer.parseInt(min.getText()) && inv <= Integer.parseInt(max.getText())) {
@@ -114,8 +149,11 @@ public class AddPartFormController implements Initializable {
         return false;
     }
 
-
-
+    /**
+     * displays assorted errors
+     * should be made into a class
+     * @param code id of error
+     */
     private void errorMessage(int code) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -138,6 +176,11 @@ public class AddPartFormController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * adds part after validation
+     * @param actionEvent
+     * @throws IOException
+     */
     public void addPart(ActionEvent actionEvent) throws IOException {
         if (partName.getText().isEmpty() ||
                 price.getText().isEmpty() ||
@@ -185,6 +228,11 @@ public class AddPartFormController implements Initializable {
         toMainForm(actionEvent);
     }
 
+    /**
+     * returns to the main view
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toMainForm(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
         controller.MainFormController controller = new controller.MainFormController(inventory);

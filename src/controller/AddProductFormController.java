@@ -51,10 +51,20 @@ public class AddProductFormController implements Initializable {
     @FXML
     private TextField partSearchBar;
 
+    /**
+     *
+     * @param inv singleton inventory
+     */
     public AddProductFormController(Inventory inv) {
         this.inventory = inv;
         this.id = ThreadLocalRandom.current().nextInt(1000, 2000);
     }
+
+    /**
+     * setup tables and search bar listener
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partTable.setItems(Inventory.getAllParts());
@@ -75,6 +85,10 @@ public class AddProductFormController implements Initializable {
         });
     }
 
+    /**
+     * add part to associatedParts
+     * @param actionEvent
+     */
     public void addAssociatedPart(ActionEvent actionEvent) {
         Part part = (Part)partTable.getSelectionModel().getSelectedItem();
         if (part == null) {
@@ -85,6 +99,10 @@ public class AddProductFormController implements Initializable {
             this.associatedParts.add(part);
     }
 
+    /**
+     * confirms removals
+     * @return
+     */
     private boolean confirmDelete() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Remove");
@@ -99,6 +117,10 @@ public class AddProductFormController implements Initializable {
         }
     }
 
+    /**
+     * remove associated part
+     * @param actionEvent
+     */
     public void removeAssociatedPart(ActionEvent actionEvent) {
         Part part = (Part)associatedPartTable.getSelectionModel().getSelectedItem();
         if (part == null) {
@@ -110,6 +132,10 @@ public class AddProductFormController implements Initializable {
         }
     }
 
+    /**
+     * filters parts
+     * @param input string to match
+     */
     private void filterPart(String input) {
         if (!input.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d+$");
@@ -129,6 +155,11 @@ public class AddProductFormController implements Initializable {
         }
     }
 
+    /**
+     * displays errors
+     * should be another class
+     * @param code error code
+     */
     private void errorMessage(int code) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -154,18 +185,26 @@ public class AddProductFormController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * is this string an int
+     * @param name string to be parsed
+     * @return is it an int
+     */
     private boolean validateInteger(String name) {
-        try
-        {
+        try {
             Integer.parseInt(name);
             return true;
-        } catch (NumberFormatException ex)
-        {
+        } catch (NumberFormatException ex) {
             errorMessage(1);
             return false;
         }
     }
 
+    /**
+     * is this string a double
+     * @param name string to be parsed
+     * @return is it a double
+     */
     private boolean validateDouble(String name) {
         if (!name.isEmpty()) {
             Pattern pattern = Pattern.compile("^\\d*\\.?\\d+|^\\d+\\.?\\d*$");
@@ -178,6 +217,11 @@ public class AddProductFormController implements Initializable {
         return true;
     }
 
+    /**
+     * is min less than max
+     * @param min min to check
+     * @return yes or no
+     */
     private boolean validateMin(int min) {
         if (!productMax.getText().isEmpty()) {
             if (min > Integer.parseInt(this.productMax.getText())) {
@@ -188,6 +232,11 @@ public class AddProductFormController implements Initializable {
         return true;
     }
 
+    /**
+     * is max more than min
+     * @param max max to check
+     * @return greater than
+     */
     private boolean validateMax(int max) {
         if (!productMin.getText().isEmpty()) {
             if (max < Integer.parseInt(this.productMin.getText())) {
@@ -198,6 +247,11 @@ public class AddProductFormController implements Initializable {
         return true;
     }
 
+    /**
+     * is inventory between min and max
+     * @param inv count to check
+     * @return is valid
+     */
     private boolean validateInventory(int inv) {
         if (!productMax.getText().isEmpty() && !productMin.getText().isEmpty()) {
             if (inv >= Integer.parseInt(productMin.getText()) && inv <= Integer.parseInt(productMax.getText())) {
@@ -209,6 +263,11 @@ public class AddProductFormController implements Initializable {
         return false;
     }
 
+    /**
+     * add product to inventory
+     * @param actionEvent
+     * @throws IOException
+     */
     public void addProduct(ActionEvent actionEvent) throws IOException {
         if (productName.getText().isEmpty() ||
                 productPrice.getText().isEmpty() ||
@@ -247,6 +306,11 @@ public class AddProductFormController implements Initializable {
         toMainForm(actionEvent);
     }
 
+    /**
+     * return to main screen
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toMainForm(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
         controller.MainFormController controller = new controller.MainFormController(inventory);
