@@ -4,10 +4,18 @@ public class OutSourced extends Part {
 
     private String companyName;
 
+    /**
+     *
+     * @return company name
+     */
     public String getCompanyName() {
         return companyName;
     }
 
+    /**
+     *
+     * @param companyName company name
+     */
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }

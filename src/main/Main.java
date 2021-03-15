@@ -7,13 +7,23 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.*;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main extends Application {
 
+    /**
+     * Javadoc folder found in
+     * @param primaryStage
+     * @throws Exception
+     */
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+
+
         Inventory inventory = new Inventory();
         addData(inventory);
         String test = "";
@@ -22,11 +32,15 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainForm.fxml"));
         controller.MainFormController controller = new controller.MainFormController(inventory);
         loader.setController(controller);
-        Parent root = loader.load();
-        Scene scene = new Scene(root, 800,350);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Inventory Management");
-        primaryStage.show();
+        try {
+            Parent root = loader.load();
+            Scene scene = new Scene(root, 800,350);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Inventory Management");
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addData(Inventory inventory) {
