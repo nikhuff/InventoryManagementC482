@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -102,12 +103,98 @@ public class ModifyProductFormController implements Initializable {
         this.associatedParts.remove(part);
     }
 
+
+    private void errorMessage(int code) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        if (code == 1) {
+            alert.setHeaderText("Wrong Input Type");
+            alert.setContentText("Must be a number.");
+        } else if (code == 2) {
+            alert.setHeaderText("Improper Bounds");
+            alert.setContentText("Maximum must be larger than Minimum");
+        } else if (code == 3) {
+            alert.setHeaderText("Empty Field");
+            alert.setContentText("Field must not be empty");
+        } else if (code == 4) {
+            alert.setHeaderText("Invalid Inventory Count");
+            alert.setContentText("Inventory must be more than min and less than max");
+        }
+        alert.showAndWait();
+    }
+
+    private boolean validateInteger(String name) {
+        if (!name.isEmpty()) {
+            Pattern pattern = Pattern.compile("^\\d*\\.?\\d+|^\\d+\\.?\\d*$");
+            Matcher matcher = pattern.matcher(name);
+            if (!matcher.find()) {
+                errorMessage(1);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validateMin(int min) {
+        if (!productMax.getText().isEmpty()) {
+            if (min > Integer.parseInt(this.productMax.getText())) {
+                errorMessage(2);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validateMax(int max) {
+        if (!productMin.getText().isEmpty()) {
+            if (max < Integer.parseInt(this.productMin.getText())) {
+                errorMessage(2);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validateInventory(int inv) {
+        if (!productMax.getText().isEmpty() && !productMin.getText().isEmpty()) {
+            if (inv >= Integer.parseInt(productMin.getText()) && inv <= Integer.parseInt(productMax.getText())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
     public void updateProduct(ActionEvent actionEvent) throws IOException {
+        if (productName.getText().isEmpty() ||
+                productCost.getText().isEmpty() ||
+                productInventory.getText().isEmpty() ||
+                productMin.getText().isEmpty() ||
+                productMax.getText().isEmpty()) {
+            errorMessage(3);
+            return;
+        }
+        if (!validateInteger(productCost.getText()) ||
+                !validateInteger(productInventory.getText()) ||
+                !validateInteger(productMin.getText()) ||
+                !validateInteger(productMax.getText())) {
+            return;
+        }
         String name = productName.getText();
         double cost = Double.parseDouble(productCost.getText());
         int inv = Integer.parseInt(productInventory.getText());
         int minimum = Integer.parseInt(productMin.getText());
         int maximum = Integer.parseInt(productMax.getText());
+
+        if(!validateMax(maximum))
+            return;
+        if(!validateMin(minimum))
+            return;
+        if(!validateInventory(inv)) {
+            errorMessage(4);
+            return;
+        }
 
         Product newProduct = new Product(product.getId(), name, cost, inv, minimum, maximum);
         for (Part currentPart : associatedParts) {

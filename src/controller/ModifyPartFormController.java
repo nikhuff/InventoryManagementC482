@@ -7,10 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.InHouse;
 import model.Inventory;
@@ -20,6 +17,8 @@ import model.Part;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModifyPartFormController implements Initializable {
     Inventory inventory;
@@ -79,13 +78,99 @@ public class ModifyPartFormController implements Initializable {
         });
     }
 
+    private void errorMessage(int code) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        if (code == 1) {
+            alert.setHeaderText("Wrong Input Type");
+            alert.setContentText("Must be a number.");
+        } else if (code == 2) {
+            alert.setHeaderText("Improper Bounds");
+            alert.setContentText("Maximum must be larger than Minimum");
+        } else if (code == 3) {
+            alert.setHeaderText("Empty Field");
+            alert.setContentText("Field must not be empty");
+        } else if (code == 4) {
+            alert.setHeaderText("Invalid Inventory Count");
+            alert.setContentText("Inventory must be more than min and less than max");
+        }
+        alert.showAndWait();
+    }
+
+    private boolean validateInteger(String name) {
+        if (!name.isEmpty()) {
+            Pattern pattern = Pattern.compile("^\\d*\\.?\\d+|^\\d+\\.?\\d*$");
+            Matcher matcher = pattern.matcher(name);
+            if (!matcher.find()) {
+                errorMessage(1);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validateMin(int min) {
+        if (!partMax.getText().isEmpty()) {
+            if (min > Integer.parseInt(this.partMax.getText())) {
+                errorMessage(2);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validateMax(int max) {
+        if (!partMin.getText().isEmpty()) {
+            if (max < Integer.parseInt(this.partMin.getText())) {
+                errorMessage(2);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validateInventory(int inv) {
+        if (!partMax.getText().isEmpty() && !partMin.getText().isEmpty()) {
+            if (inv >= Integer.parseInt(partMin.getText()) && inv <= Integer.parseInt(partMax.getText())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
     public void save(ActionEvent actionEvent) throws IOException {
+        if (partName.getText().isEmpty() ||
+                partCost.getText().isEmpty() ||
+                partInventory.getText().isEmpty() ||
+                partMin.getText().isEmpty() ||
+                partMax.getText().isEmpty()) {
+            errorMessage(3);
+            return;
+        }
+        if (!validateInteger(partCost.getText()) ||
+                !validateInteger(partInventory.getText()) ||
+                !validateInteger(partMin.getText()) ||
+                !validateInteger(partMax.getText())) {
+            return;
+        }
         int id = Integer.parseInt(partId.getText().trim());
         String name = partName.getText().trim();
         int count = Integer.parseInt(partInventory.getText().trim());
         double cost = Double.parseDouble(partCost.getText().trim());
         int max = Integer.parseInt(partMax.getText().trim());
         int min = Integer.parseInt(partMin.getText().trim());
+
+        if(!validateMax(max))
+            return;
+        if(!validateMin(min))
+            return;
+        if(!validateInventory(count)) {
+            errorMessage(4);
+            return;
+        }
+
         if (radioInHouse.isSelected()) {
             updateInHouse(id, name, count, cost, max, min);
         } else if (radioOutsourced.isSelected()) {
