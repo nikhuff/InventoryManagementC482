@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class Main extends Application {
 
     /**
-     * Javadoc folder found in
+     * Javadoc folder found in /out/javadoc
      * @param primaryStage
      * @throws Exception
      */
